@@ -1,12 +1,14 @@
-function love.load()
+function love.load(args)
     bios = require("bios.init")
     font = love.graphics.newFont("assets/Inconsolata.ttf", 20)
     love.graphics.setFont(font)
 end
 
 function love.run()
-    love.load()
-    if bios.load then bios.load() end
+    local args = love.arg.parseGameArguments(arg)
+    love.load(love.arg.parseGameArguments(arg), arg)
+
+    if bios.load then bios.load(args) end
 
     if love.timer then love.timer.step() end
 
@@ -31,12 +33,14 @@ function love.run()
         if love.timer then dt = love.timer.step() end
 
         if bios.update then bios.update(dt) end
+        bios.event("update", dt)
 
         if love.graphics and love.graphics.isActive() then
             love.graphics.origin()
             love.graphics.clear(love.graphics.getBackgroundColor())
 
             bios.draw()
+            bios.event("draw")
 
             love.graphics.present()
         end
