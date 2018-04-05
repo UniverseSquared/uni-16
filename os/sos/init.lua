@@ -1,8 +1,20 @@
 local OS = {
-    _version = "0.2 Beta"
+    _version = "0.3 Beta"
 }
 local tBuffer = {}
 local line = 2
+
+function split(s, sep)
+    local sep, fields = sep, {}
+    local pattern = string.format("([^%s]+)", sep)
+    s:gsub(pattern, function(c) fields[#fields + 1] = c end)
+    return fields
+end
+
+function print(str)
+    table.insert(tBuffer, str)
+    line = line + 1
+end
 
 function OS.load()
     tBuffer = {
@@ -17,9 +29,21 @@ function OS.draw()
     end
 end
 
+function processCommand(l)
+    local args = split(l, " ")
+    local cmd = args[1]
+
+    if cmd == "test" then
+        print("hello world")
+    end
+end
+
 function OS.keypressed(key, scancode, isrepeat)
     if key == "backspace" then
         tBuffer[line] = tBuffer[line]:sub(1, #tBuffer[line] - 1)
+    elseif key == "return" then
+        processCommand(tBuffer[line])
+        print("")
     end
 end
 
