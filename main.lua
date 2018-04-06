@@ -6,7 +6,7 @@ end
 
 function love.run()
     local args = love.arg.parseGameArguments(arg)
-    love.load(love.arg.parseGameArguments(arg), arg)
+    love.load(args, arg)
 
     if bios.load then bios.load(args) end
 
