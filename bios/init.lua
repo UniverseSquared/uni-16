@@ -21,6 +21,8 @@ function BIOS.load(args)
         end
     end
 
+    love.filesystem.load("bios/errhandler.lua")()
+    
     font = love.graphics.getFont()
     fw = font:getWidth(" ")
     fh = font:getHeight()
