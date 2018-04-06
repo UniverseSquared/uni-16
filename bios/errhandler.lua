@@ -1,4 +1,4 @@
-function love.errhand(msg)
+function love.errorhandler(msg)
     local traceback = debug.traceback()
 
     local function draw()
