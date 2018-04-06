@@ -77,7 +77,7 @@ end
 
 function safeCall(func, ...)
     if func then
-        local ok, err = pcall(func, unpack(arg))
+        local ok, err = pcall(func, ...)
         if not ok then print("Error: " .. err) return -1 end
         return 0
     end
@@ -99,7 +99,6 @@ end
 
 function loadCart(name)
     local data = {}
-    -- local func = love.filesystem.load("carts/" .. name .. ".u16")
     local path = "carts/" .. name .. ".u16"
     local info = love.filesystem.getInfo(path)
     if info == nil then
@@ -123,8 +122,12 @@ function loadCart(name)
         running = false
     }
     for name, func in pairs(data) do
-        cart.funcs[name] = func
-        setfenv(cart.funcs[name], sandbox)
+        if type(func) == "function" then
+            cart.funcs[name] = func
+            setfenv(cart.funcs[name], sandbox)
+        else
+            sandbox[name] = func
+        end
     end
 end
 
@@ -199,6 +202,7 @@ end
 
 function OS.draw()
     if state == states.terminal then
+        setColor(255, 255, 255)
         love.graphics.printf(join(tBuffer, "\n"), 5, 5, love.graphics.getWidth())
     elseif state == states.game then
         if cart == nil then

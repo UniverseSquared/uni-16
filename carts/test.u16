@@ -1,3 +1,14 @@
+rx = 10
+ry = 10
+rs = 2
+
+function _update()
+    if btn(1) then ry = ry - rs
+    elseif btn(2) then ry = ry + rs
+    elseif btn(3) then rx = rx - rs
+    elseif btn(4) then rx = rx + rs end
+end
+
 function _draw()
-    rect(10, 10, 30, 30, 3, true)
+    rect(rx, ry, 30, 30, 3, true)
 end
