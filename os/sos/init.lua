@@ -181,6 +181,7 @@ function OS.load()
         description = "Loads a game cart into memory.",
         func = function(args)
             loadCart("test")
+            loadCart(args[2])
         end
     })
     addCommand({
