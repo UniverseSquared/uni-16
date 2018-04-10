@@ -128,7 +128,7 @@ function getSandbox()
             end
         end,
         size = function()
-            return
+            return love.graphics.getWidth(), love.graphics.getHeight()
         end,
         PI = math.pi
     }
