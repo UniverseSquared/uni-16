@@ -95,12 +95,14 @@ function getSandbox()
         circle = function(x, y, r, color, fill)
             setColor(unpack(pallete[color] or pallete[2]))
             local mode = "line"
+            local fill = fill or true
             if fill then mode = "fill" end
             love.graphics.circle(mode, x, y, r)
         end,
         ellipse = function(x, y, r1, r2, color, fill)
             setColor(unpack(pallete[color] or pallete[2]))
             local mode = "line"
+            local fill = fill or true
             if fill then mode = "fill" end
             love.graphics.ellipse(mode, x, y, r1, r2)
         end,
