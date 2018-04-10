@@ -88,6 +88,7 @@ function getSandbox()
         rect = function(x, y, w, h, color, fill)
             setColor(unpack(pallete[color] or pallete[2]))
             local mode = "line"
+            local fill = fill or true
             if fill then mode = "fill" end
             love.graphics.rectangle(mode, x, y, w, h)
         end,
