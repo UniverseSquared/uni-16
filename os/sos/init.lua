@@ -85,15 +85,49 @@ end
 
 function getSandbox()
     return {
-        rect = function(x, y, ex, ey, color, fill)
+        rect = function(x, y, w, h, color, fill)
             setColor(unpack(pallete[color] or pallete[2]))
             local mode = "line"
             if fill then mode = "fill" end
-            love.graphics.rectangle(mode, x, y, ex, ey)
+            love.graphics.rectangle(mode, x, y, w, h)
+        end,
+        circle = function(x, y, r, color, fill)
+            setColor(unpack(pallete[color] or pallete[2]))
+            local mode = "line"
+            if fill then mode = "fill" end
+            love.graphics.circle(mode, x, y, r)
+        end,
+        ellipse = function(x, y, r1, r2, color, fill)
+            setColor(unpack(pallete[color] or pallete[2]))
+            local mode = "line"
+            if fill then mode = "fill" end
+            love.graphics.ellipse(mode, x, y, r1, r2)
         end,
         btn = function(id)
             return love.keyboard.isDown(buttons[id])
-        end
+        end,
+        floor = function(num)
+            return math.floor(num)
+        end,
+        sin = function(num)
+            return math.sin(num)
+        end,
+        cos = function(num)
+            return math.cos(num)
+        end,
+        tan = function(num)
+            return math.tan(num)
+        end,
+        add = table.insert,
+        foreach = function(arr, callback)
+            for k, v in pairs(arr) do
+                callback(v, k, arr)
+            end
+        end,
+        size = function()
+            return
+        end,
+        PI = math.pi
     }
 end
 
@@ -180,7 +214,6 @@ function OS.load()
         aliases = {"load"},
         description = "Loads a game cart into memory.",
         func = function(args)
-            loadCart("test")
             loadCart(args[2])
         end
     })
@@ -191,6 +224,16 @@ function OS.load()
         func = function(args)
             safeCall(cart.funcs._init)
             state = states.game
+        end
+    })
+    addCommand({
+        name = "list",
+        aliases = {"list", "ls", "dir"},
+        description = "List all carts in the 'carts' folder.",
+        func = function()
+            local carts = love.filesystem.getDirectoryItems("carts")
+            print("All carts (" .. #carts .. "):")
+            for _, v in pairs(carts) do print(v:sub(0, #v-4)) end
         end
     })
 end
@@ -242,7 +285,7 @@ function OS.keypressed(key, scancode, isrepeat)
     end
     if state == states.terminal then
         if key == "backspace" then
-            tBuffer[line] = tBuffer[line]:sub(1, #tBuffer[line] - 1)
+            if tBuffer[line] ~= prompt then tBuffer[line] = tBuffer[line]:sub(1, #tBuffer[line] - 1) end
         elseif key == "return" then
             processCommand(tBuffer[line])
             print(prompt)
