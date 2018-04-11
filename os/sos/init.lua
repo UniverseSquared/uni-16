@@ -11,19 +11,6 @@ local states = {
     game = 2
 }
 local state = states.terminal
-local pallete = {
-    [1] = {0, 0, 0},
-    [2] = {255, 255, 255},
-    [3] = {255, 0, 0}
-}
-local buttons = {
-    [1] = "up",
-    [2] = "down",
-    [3] = "left",
-    [4] = "right",
-    [5] = "z",
-    [6] = "x"
-}
 
 function split(s, sep)
     local sep, fields = sep, {}
@@ -84,54 +71,7 @@ function safeCall(func, ...)
 end
 
 function getSandbox()
-    return {
-        rect = function(x, y, w, h, color, fill)
-            setColor(unpack(pallete[color] or pallete[2]))
-            local mode = "line"
-            local fill = fill or true
-            if fill then mode = "fill" end
-            love.graphics.rectangle(mode, x, y, w, h)
-        end,
-        circle = function(x, y, r, color, fill)
-            setColor(unpack(pallete[color] or pallete[2]))
-            local mode = "line"
-            local fill = fill or true
-            if fill then mode = "fill" end
-            love.graphics.circle(mode, x, y, r)
-        end,
-        ellipse = function(x, y, r1, r2, color, fill)
-            setColor(unpack(pallete[color] or pallete[2]))
-            local mode = "line"
-            local fill = fill or true
-            if fill then mode = "fill" end
-            love.graphics.ellipse(mode, x, y, r1, r2)
-        end,
-        btn = function(id)
-            return love.keyboard.isDown(buttons[id])
-        end,
-        floor = function(num)
-            return math.floor(num)
-        end,
-        sin = function(num)
-            return math.sin(num)
-        end,
-        cos = function(num)
-            return math.cos(num)
-        end,
-        tan = function(num)
-            return math.tan(num)
-        end,
-        add = table.insert,
-        foreach = function(arr, callback)
-            for k, v in pairs(arr) do
-                callback(v, k, arr)
-            end
-        end,
-        size = function()
-            return love.graphics.getWidth(), love.graphics.getHeight()
-        end,
-        PI = math.pi
-    }
+    return require("os.sos.sandbox")
 end
 
 function loadCart(name)
