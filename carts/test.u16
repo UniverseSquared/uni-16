@@ -1,6 +1,10 @@
-rx = 10
-ry = 10
 rs = 2
+
+function _init()
+    w, h = size()
+    rx = rand(w)
+    ry = rand(h)
+end
 
 function _update()
     if btn(1) then ry = ry - rs

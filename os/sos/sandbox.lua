@@ -57,6 +57,15 @@ s.tan = function(num)
     return math.tan(num)
 end
 
+s.rand = function(min, max)
+    if not max and min then
+        return love.math.random(0, min)
+    end
+    local min = min or 0
+    local max = max or 1
+    return love.math.random(min, max)
+end
+
 s.add = table.insert
 
 s.foreach = function(arr, callback)
