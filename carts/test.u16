@@ -15,4 +15,5 @@ end
 
 function _draw()
     rect(rx, ry, 30, 30, 3, true)
+    text(time(), 5, 5)
 end

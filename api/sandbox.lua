@@ -37,6 +37,13 @@ s.ellipse = function(x, y, r1, r2, color, fill)
     love.graphics.ellipse(mode, x, y, r1, r2)
 end
 
+s.text = function(str, x, y, color, sx, sy)
+    setColor(unpack(pallete[color] or pallete[2]))
+    local sx = sx or 1
+    local sy = sy or 1
+    love.graphics.print(str, x, y, 0, sx, sy)
+end
+
 s.btn = function(id)
     return love.keyboard.isDown(buttons[id])
 end
@@ -66,6 +73,8 @@ s.rand = function(min, max)
     return love.math.random(min, max)
 end
 
+s.PI = math.pi
+
 s.add = table.insert
 
 s.foreach = function(arr, callback)
@@ -78,6 +87,6 @@ s.size = function()
     return love.graphics.getWidth(), love.graphics.getHeight()
 end
 
-s.PI = math.pi
+s.time = os.time
 
 return s
