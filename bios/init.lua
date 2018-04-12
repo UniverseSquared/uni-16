@@ -63,7 +63,7 @@ function BIOS.draw()
     if not loaded then
         if mode == 1 then
             if timer < bootTime then
-                love.graphics.print("Uni-8 BIOS system version " .. BIOS._version, 5, 5)
+                love.graphics.print("Uni-16 BIOS system version " .. BIOS._version, 5, 5)
                 love.graphics.print("Loading OS " .. osName, 5, 30)
                 love.graphics.print("Press F1 for BIOS settings or F2 for boot options.", 5, sh - (fh + 5))
             end
