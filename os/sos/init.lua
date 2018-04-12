@@ -71,41 +71,7 @@ function safeCall(func, ...)
 end
 
 function getSandbox()
-    return require("os.sos.sandbox")
-end
-
-function loadCart(name)
-    local data = {}
-    local path = "carts/" .. name .. ".u16"
-    local info = love.filesystem.getInfo(path)
-    if info == nil then
-        print("No such cart '" .. name .. "'.")
-        return
-    end
-    local ok, func = pcall(love.filesystem.load, "carts/" .. name .. ".u16")
-    if not ok then
-        print("Error: " .. tostring(func))
-        return
-    end
-    setfenv(func, data)
-    local ok, err = pcall(func)
-    if not ok then
-        print("Error: " .. tostring(err))
-        return
-    end
-    local sandbox = getSandbox()
-    cart = {
-        funcs = {},
-        running = false
-    }
-    for name, func in pairs(data) do
-        if type(func) == "function" then
-            cart.funcs[name] = func
-            setfenv(cart.funcs[name], sandbox)
-        else
-            sandbox[name] = func
-        end
-    end
+    return require("api.sandbox")
 end
 
 function OS.load()
@@ -114,6 +80,8 @@ function OS.load()
         "Type 'help' for help.",
         prompt
     }
+
+    c = require("api.cart")
 
     addCommand({
         name = "help",
@@ -157,7 +125,7 @@ function OS.load()
         aliases = {"load"},
         description = "Loads a game cart into memory.",
         func = function(args)
-            loadCart(args[2])
+            cart = c.load(args[2])
         end
     })
     addCommand({
@@ -177,6 +145,14 @@ function OS.load()
             local carts = love.filesystem.getDirectoryItems("carts")
             print("All carts (" .. #carts .. "):")
             for _, v in pairs(carts) do print(v:sub(0, #v-4)) end
+        end
+    })
+    addCommand({
+        name = "exit",
+        aliases = {"exit", "shutdown"},
+        description = "Exit UNI-16.",
+        func = function()
+            love.event.quit()
         end
     })
 end

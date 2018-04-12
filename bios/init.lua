@@ -2,7 +2,7 @@ local BIOS = {
     _version = "0.2 Beta"
 }
 local timer = 0
-local bootTime = 3
+local bootTime = 2
 local loaded = false
 local mode = 1
 local os = {}
