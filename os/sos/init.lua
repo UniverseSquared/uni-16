@@ -65,7 +65,7 @@ end
 function safeCall(func, ...)
     if func then
         local ok, err = pcall(func, ...)
-        if not ok then print("Error: " .. err) return -1 end
+        if not ok then print("Error: " .. err) cart = nil state = states.terminal return -1 end
         return 0
     end
 end
