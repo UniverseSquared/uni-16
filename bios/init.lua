@@ -23,24 +23,27 @@ function BIOS.event(name, a, b, c, d, e, f)
     end
 end
 
-function BIOS.load(args)
+function BIOS.load(args, modules)
     for _, option in pairs(args) do
         if option == "--skip-bios" or option == "-s" then
             bootTime = 0
         end
     end
 
-    love.filesystem.load("bios/errhandler.lua")()
+    for name, module in pairs(modules) do
+        _G[name] = module
+    end
 
-    font = love.graphics.getFont()
+    fs.load("bios/errhandler.lua")()
+
+    font = gpu.getFont()
     fw = font:getWidth(" ")
     fh = font:getHeight()
-    sw = love.graphics.getWidth()
-    sh = love.graphics.getHeight()
-    osList = love.filesystem.getDirectoryItems("os")
+    sw, sh = gpu.getSize()
+    osList = fs.getItems("os")
     dList = {}
     for k, v in pairs(osList) do dList[k] = k .. ") " .. v end
-    osName = love.filesystem.read("bios/default")
+    osName = fs.read("bios/default")
 end
 
 function BIOS.update(dt)
@@ -63,15 +66,15 @@ function BIOS.draw()
     if not loaded then
         if mode == 1 then
             if timer < bootTime then
-                love.graphics.print("Uni-16 BIOS system version " .. BIOS._version, 5, 5)
-                love.graphics.print("Loading OS " .. osName, 5, 30)
-                love.graphics.print("Press F1 for BIOS settings or F2 for boot options.", 5, sh - (fh + 5))
+                gpu.print("Uni-16 BIOS system version " .. BIOS._version, 5, 5)
+                gpu.print("Loading OS " .. osName, 5, 30)
+                gpu.print("Press F1 for BIOS settings or F2 for boot options.", 5, sh - (fh + 5))
             end
         elseif mode == 2 then
-            love.graphics.print("Work in progress", 5, 5)
-            love.graphics.print("Press escape to return.", 5, sh - (fh + 5))
+            gpu.print("Work in progress", 5, 5)
+            gpu.print("Press escape to return.", 5, sh - (fh + 5))
         elseif mode == 3 then
-            love.graphics.print(join(dList, "\n"), 5, 5)
+            gpu.print(join(dList, "\n"), 5, 5)
         end
     end
 end

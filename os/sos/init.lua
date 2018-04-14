@@ -29,25 +29,6 @@ function join(arr, delim)
     return str:sub(1, #str - #delim)
 end
 
-function setColor(r, g, b, a)
-    if type(r) == "table" then
-        r, g, b, a = unpack(r)
-    end
-
-    if r then r = r / 255 end
-    if g then g = g / 255 end
-    if b then b = b / 255 end
-    if a then a = a / 255 end
-
-    love.graphics.setColor(r, g, b, a)
-end
-
-function getColor()
-    local r, g, b, a = love.graphics.getColor()
-    local floor = math.floor
-    return floor(r * 255), floor(g * 255), floor(b * 255), floor(a * 255)
-end
-
 function print(str)
     table.insert(tBuffer, str)
     line = line + 1
@@ -82,6 +63,7 @@ function OS.load()
     }
 
     c = require("api.cart")
+    sw, sh = gpu.getSize()
 
     addCommand({
         name = "help",
@@ -142,7 +124,7 @@ function OS.load()
         aliases = {"list", "ls", "dir"},
         description = "List all carts in the 'carts' folder.",
         func = function()
-            local carts = love.filesystem.getDirectoryItems("carts")
+            local carts = fs.getItems("carts")
             print("All carts (" .. #carts .. "):")
             for _, v in pairs(carts) do print(v:sub(0, #v-4)) end
         end
@@ -152,7 +134,7 @@ function OS.load()
         aliases = {"exit", "shutdown"},
         description = "Exit UNI-16.",
         func = function()
-            love.event.quit()
+            cpu.shutdown()
         end
     })
 end
@@ -165,11 +147,11 @@ end
 
 function OS.draw()
     if state == states.terminal then
-        setColor(255, 255, 255)
-        love.graphics.printf(join(tBuffer, "\n"), 5, 5, love.graphics.getWidth())
+        gpu.setColor(255, 255, 255)
+        gpu.printf(join(tBuffer, "\n"), 5, 5, sw)
     elseif state == states.game then
         if cart == nil then
-            love.graphics.print("No game cart loaded.", 20, 20)
+            gpu.print("No game cart loaded.", 20, 20)
         else
             if cart.running then
                 safeCall(cart.funcs._draw)

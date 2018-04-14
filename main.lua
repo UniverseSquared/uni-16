@@ -2,13 +2,18 @@ function love.load(args)
     bios = require("bios.init")
     font = love.graphics.newFont("assets/Inconsolata.ttf", 20)
     love.graphics.setFont(font)
+    modules = {}
+    for _, name in pairs(love.filesystem.getDirectoryItems("api/modules")) do
+        local moduleName = name:sub(1, #name - 4)
+        modules[moduleName] = require("api.modules." .. moduleName)
+    end
 end
 
 function love.run()
     local args = love.arg.parseGameArguments(arg)
     love.load(args, arg)
 
-    if bios.load then bios.load(args) end
+    if bios.load then bios.load(args, modules) end
 
     if love.timer then love.timer.step() end
 
