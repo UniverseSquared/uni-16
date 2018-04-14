@@ -1,6 +1,8 @@
 local gpu = {}
 
 gpu.print = function(text, x, y, sx, sy)
+    local sx = sx or 1
+    local sy = sy or 1
     love.graphics.print(text, x, y, 0, sx, sy)
 end
 
