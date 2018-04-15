@@ -34,8 +34,6 @@ function BIOS.load(args, modules)
         _G[name] = module
     end
 
-    fs.load("bios/errhandler.lua")()
-
     font = gpu.getFont()
     fw = font:getWidth(" ")
     fh = font:getHeight()

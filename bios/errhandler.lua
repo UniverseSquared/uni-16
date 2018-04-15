@@ -1,5 +1,8 @@
+local default = love.graphics.getFont()
+
 function love.errorhandler(msg)
     local traceback = debug.traceback()
+    love.graphics.setFont(default)
 
     local function draw()
         love.graphics.clear(love.graphics.getBackgroundColor())

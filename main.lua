@@ -1,4 +1,5 @@
 function love.load(args)
+    love.filesystem.load("bios/errhandler.lua")()
     bios = require("bios.init")
     font = love.graphics.newFont("assets/Inconsolata.ttf", 20)
     love.graphics.setFont(font)
