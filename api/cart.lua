@@ -1,6 +1,6 @@
 local cart = {}
 
-function cart.load(name)
+function cart.load(name, sandbox)
     local data = {}
     local path = "carts/" .. name .. ".u16"
     local info = love.filesystem.getInfo(path)
@@ -16,7 +16,6 @@ function cart.load(name)
     if not ok then
         return nil, tostring(func)
     end
-    local sandbox = getSandbox()
     local cart = {
         funcs = {},
         running = false
