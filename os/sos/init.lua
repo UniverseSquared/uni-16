@@ -8,7 +8,8 @@ local commands = {}
 local cart = nil
 local states = {
     terminal = 1,
-    game = 2
+    game = 2,
+    editor = 3
 }
 local state = states.terminal
 
@@ -62,8 +63,10 @@ function OS.load()
         prompt
     }
 
+    editor = require("os.sos.editor")
     c = require("api.cart")
     sw, sh = gpu.getSize()
+    saveDir = love.filesystem.getSaveDirectory()
 
     addCommand({
         name = "help",
@@ -137,6 +140,19 @@ function OS.load()
             cpu.shutdown()
         end
     })
+    addCommand({
+        name = "edit",
+        aliases = {"edit", "editor", "nano"},
+        description = "Simple editor.",
+        func = function(args)
+            if #args == 1 then
+                print("Usage: edit <file>")
+            else
+                editor.loadFile("carts/" .. args[2] .. ".u16")
+                state = states.editor
+            end
+        end
+    })
 end
 
 function OS.update(dt)
@@ -160,6 +176,8 @@ function OS.draw()
                 safeCall(cart.funcs._init)
             end
         end
+    elseif state == states.editor then
+        editor.draw()
     end
 end
 
@@ -191,12 +209,23 @@ function OS.keypressed(key, scancode, isrepeat)
             processCommand(tBuffer[line])
             print(prompt)
         end
+    elseif state == states.editor then
+        editor.keypressed(key, scancode, isrepeat)
+        if key == "e" and love.keyboard.isDown("lctrl") then
+            state = states.terminal
+            editor.reset()
+        elseif key == "s" and love.keyboard.isDown("lctrl") then
+            editor.save()
+            state = states.terminal
+        end
     end
 end
 
 function OS.textinput(str)
     if state == states.terminal then
         tBuffer[line] = tBuffer[line] .. str
+    elseif state == states.editor then
+        editor.textinput(str)
     end
 end
 
