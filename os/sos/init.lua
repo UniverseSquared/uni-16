@@ -53,7 +53,7 @@ function safeCall(func, ...)
 end
 
 function getSandbox()
-    return require("api.sandbox")
+    return sandbox.getSandbox()
 end
 
 function OS.load()
@@ -65,6 +65,7 @@ function OS.load()
 
     editor = require("os.sos.editor")
     c = require("api.cart")
+    sandbox = require("api.sandbox")
     sw, sh = gpu.getSize()
     saveDir = love.filesystem.getSaveDirectory()
 
@@ -151,6 +152,14 @@ function OS.load()
                 editor.loadFile("carts/" .. args[2] .. ".u16")
                 state = states.editor
             end
+        end
+    })
+    addCommand({
+        name = "folder",
+        aliases = {"folder", "dir"},
+        description = "Open the save directory in your file explorer.",
+        func = function(args)
+            love.system.openURL("file://" .. love.filesystem.getSaveDirectory())
         end
     })
 end
