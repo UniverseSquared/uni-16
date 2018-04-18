@@ -69,6 +69,14 @@ s = {
         sandbox.time = cpu.time
 
         sandbox.str = function(x) return tostring(x) end
+
+        sandbox.setPallete = function(new)
+            if #new ~= #s.pallete then
+                return false, "wrong size"
+            end
+            s.pallete = new
+            return true
+        end
         return sandbox
     end
 }
