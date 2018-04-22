@@ -159,6 +159,7 @@ function OS.load()
         aliases = {"folder", "dir"},
         description = "Open the save directory in your file explorer.",
         func = function(args)
+            print(love.filesystem.getSaveDirectory())
             love.system.openURL("file://" .. love.filesystem.getSaveDirectory())
         end
     })
