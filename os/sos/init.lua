@@ -63,7 +63,8 @@ function OS.load()
         prompt
     }
 
-    editor = require("os.sos.editor")
+    editor = require("os.sos.editor.editor")
+    graphics = require("os.sos.editor.graphics")
     c = require("api.cart")
     sandbox = require("api.sandbox")
     sw, sh = gpu.getSize()
@@ -149,7 +150,11 @@ function OS.load()
             if #args == 1 then
                 print("Usage: edit <file>")
             else
-                editor.loadFile("carts/" .. args[2] .. ".u16")
+                local ok, msg = editor.loadCart(args[2])
+                if not ok then
+                    print(msg)
+                    return
+                end
                 state = states.editor
             end
         end

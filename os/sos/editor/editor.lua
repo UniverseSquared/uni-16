@@ -5,6 +5,7 @@ local sw, sh = gpu.getSize()
 local f = gpu.getFont()
 local fw = f:getWidth(" ")
 local fh = f:getHeight()
+local c = require("api.cart")
 local file
 
 function join(arr, delim)
@@ -97,27 +98,27 @@ function editor.reset()
     cursor = {x = 1, y = 1}
 end
 
-function editor.loadFile(fileName)
-    editor.reset()
-    if not fs.exists(fileName) then
-        fs.write(fileName, "")
-    else
-        local str = fs.read(fileName)
-        local buf = split(str, "\n")
-        for k, v in pairs(buf) do
-            buf[k] = {}
-            for i = 1, #v do
-                table.insert(buf[k], v:sub(i, i))
-            end
-        end
-        buffer = buf
-        if #buffer == 0 then buffer = {{""}} end
+function editor.loadCart(cartName)
+    if not fs.exists("carts/" .. cartName .. ".u16") then
+        return false, "No such cart."
     end
-    file = fileName
+    editor.reset()
+    local str = c.getData(cartName)["lua"]
+    local buf = split(str, "\n")
+    for k, v in pairs(buf) do
+        buf[k] = {}
+        for i = 1, #v do
+            table.insert(buf[k], v:sub(i, i))
+        end
+    end
+    buffer = buf
+    if #buffer == 0 then buffer = {{""}} end
+    cart = cartName
+    return true
 end
 
 function editor.save()
-    fs.write(file, getBufferString())
+    c.saveSection(cart, "lua", getBufferString())
 end
 
 return editor

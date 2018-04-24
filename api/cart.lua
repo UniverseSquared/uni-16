@@ -25,6 +25,21 @@ function cart.getData(name)
     return data
 end
 
+function cart.saveData(name, data)
+    local str = ""
+    for section, code in pairs(data) do
+        str = str .. "__" .. section .. "__\n"
+        str = str .. code
+    end
+    fs.write("carts/" .. name .. ".u16", str)
+end
+
+function cart.saveSection(name, section, data)
+    local d = cart.getData(name)
+    d[section] = data
+    cart.saveData(name, d)
+end
+
 function cart.load(name, sandbox)
     local data = {}
     local path = "carts/" .. name .. ".u16"
