@@ -1,12 +1,12 @@
-all: love
+all: love win32
+	@echo "Built for all platforms."
 
 clean:
 	@echo "Cleaning..."
-	rm -f build/*
+	rm -rf build/*
 
 love: clean
 	@echo "Generating .love file..."
-	mkdir -p build
 	zip -rq build/uni-16.love .
 
 win32: love
