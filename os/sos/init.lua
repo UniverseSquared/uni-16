@@ -117,7 +117,11 @@ function OS.load()
         aliases = {"load"},
         description = "Loads a game cart into memory.",
         func = function(args)
-            cart = c.load(args[2], getSandbox())
+            if #args == 1 then
+                print("Usage: load <name>")
+            else
+                cart = c.load(args[2], getSandbox())
+            end
         end
     })
     addCommand({
