@@ -67,8 +67,13 @@ function OS.load()
     graphics = require("os.sos.editor.graphics")
     c = require("api.cart")
     sandbox = require("api.sandbox")
+    util = require("api.util")
     sw, sh = gpu.getSize()
     saveDir = love.filesystem.getSaveDirectory()
+    
+    if util.isMobile() then
+        keyboard.open(true)
+    end
 
     addCommand({
         name = "help",
