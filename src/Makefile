@@ -6,6 +6,7 @@ clean:
 	rm -rf ../build/*
 
 love: clean
+	mkdir -p ../build
 	@echo "Generating .love file..."
 	zip -rq ../build/uni-16.love .
 
