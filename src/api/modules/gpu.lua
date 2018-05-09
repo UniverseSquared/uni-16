@@ -51,6 +51,17 @@ gpu.setColor = function(r, g, b, a)
     love.graphics.setColor(r, g, b, a)
 end
 
+gpu.image = function(image, x, y, pallete, ps)
+    for i = 1, #image do
+        local line = image[i]
+        for j = 1, #line do
+            local color = line[i]
+            gpu.setColor(unpack(pallete[color]))
+            love.graphics.rectangle("fill", (i - 1) * ps + x, (j - 1) * ps + y, ps, ps)
+        end
+    end
+end
+
 gpu.getColor = function()
     local r, g, b, a = love.graphics.getColor()
     local floor = math.floor

@@ -40,6 +40,25 @@ function cart.saveSection(name, section, data)
     cart.saveData(name, d)
 end
 
+function cart.loadImageData(data)
+    local image = {}
+    local ii = 1
+    for i = 1, #data, 8 do
+        table.insert(image, {})
+        local row = data:sub(i, i + 7)
+        for j = 1, #row do
+            local char = row:sub(j, j)
+            local num = tonumber(char)
+            if num > 8 then
+                error("Invalid image")
+            end
+            table.insert(image[ii], num)
+        end
+        ii = ii + 1
+    end
+    return image
+end
+
 function cart.load(name, sandbox)
     local data = {}
     local path = "carts/" .. name .. ".u16"
